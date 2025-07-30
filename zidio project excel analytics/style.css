@@ -1,0 +1,79 @@
+
+
+:root {
+  --primary-color: #fce7f3;
+  --accent-color: #a855f7;
+  --text-color: #4b5563;
+  --bg-color: #fff7ed;
+}
+
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+.glass-box {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  color: white;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  transform: scale(1);
+}
+
+
+.glass-box.zoomed {
+  transform: scale(1.05);
+}
+
+
+
+.container {
+  background-color: var(--primary-color);
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+h1, h2, h3 {
+  color: var(--accent-color);
+  margin-bottom: 16px;
+}
+
+
+input[type="file"] {
+  border: 1px solid var(--accent-color);
+  padding: 8px;
+  border-radius: 5px;
+  color: var(--text-color);
+  background-color: #fff;
+}
+
+
+#noDataMsg {
+  color: crimson;
+  font-weight: 500;
+}
+
+
+button {
+  background-color: var(--accent-color);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #9333ea;
+}

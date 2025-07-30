@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dashboard | Excel Analytics</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#fce7f3',     
+            accent: '#a855f7',      
+            textgray: '#4b5563',    
+            peach: '#fff7ed'       
+          }
+        }
+      }
+    };
+  </script>
+</head>
+
+<body class="bg-peach text-textgray">
+
+  
+  <nav class="bg-primary shadow-md px-8 py-4 flex justify-between items-center sticky top-0 z-50">
+    <div class="text-2xl font-bold text-accent">📈 Excel Analytics</div>
+    <div class="flex items-center gap-6 font-medium">
+      <a href="home.html" class="hover:text-accent text-textgray">Home</a>
+      <a href="dashboard.html" class="text-accent font-semibold border-b-2 border-accent">Dashboard</a>
+      <a href="insights.html" class="hover:text-accent text-textgray">Insights</a>
+      <a href="logout.html" class="hover:text-red-500 text-textgray">Logout</a>
+    </div>
+  </nav>
+
+ 
+  <section class="px-6 py-10 max-w-7xl mx-auto">
+    <h2 class="text-3xl font-bold mb-6 text-center">Upload Excel File</h2>
+    
+    <div class="flex justify-center mb-8">
+      <input type="file" id="upload" class="border rounded px-4 py-2 bg-white shadow-md" />
+    </div>
+
+   
+    <div class="flex justify-center mb-4">
+      <label for="chartType" class="mr-2 font-medium">Choose Chart Type:</label>
+      <select id="chartType" class="border px-3 py-2 rounded shadow-md">
+        <option value="bar">Bar</option>
+        <option value="pie">Pie</option>
+        <option value="line">Line</option>
+      </select>
+    </div>
+
+  
+    <div class="bg-white p-6 rounded shadow-md">
+      <canvas id="chart" height="100"></canvas>
+    </div>
+
+  
+    <div id="output" class="mt-10 bg-white p-6 rounded shadow-md overflow-x-auto"></div>
+
+
+    <div id="summary" class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+  </section>
+
+ 
+  <script>
+    let chartInstance;
+
+    document.getElementById('upload').addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+
+      reader.onload = function (event) {
+        const data = new Uint8Array(event.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const json = XLSX.utils.sheet_to_json(sheet);
+
+        displayTable(json);
+        drawChart(json);
+        showSummary(json);
+      };
+
+      reader.readAsArrayBuffer(file);
+    });
+
+    function displayTable(data) {
+      const output = document.getElementById('output');
+      output.innerHTML = "<h3 class='text-xl font-semibold mb-4'>Excel Data:</h3>";
+
+      if (data.length === 0) {
+        output.innerHTML += "No data found.";
+        return;
+      }
+
+      let table = "<table class='table-auto w-full border border-gray-300 text-sm'>";
+      table += "<thead><tr class='bg-gray-100'>";
+      for (let key in data[0]) {
+        table += `<th class='px-4 py-2 border'>${key}</th>`;
+      }
+      table += "</tr></thead><tbody>";
+
+      data.forEach(row => {
+        table += "<tr>";
+        for (let key in row) {
+          table += `<td class='px-4 py-2 border'>${row[key]}</td>`;
+        }
+        table += "</tr>";
+      });
+
+      table += "</tbody></table>";
+      output.innerHTML += table;
+    }
+
+    function drawChart(data) {
+      const ctx = document.getElementById('chart').getContext('2d');
+      const chartType = document.getElementById('chartType').value;
+
+      if (chartInstance) chartInstance.destroy();
+
+      const keys = Object.keys(data[0]);
+      const labels = data.map(row => row[keys[0]]);
+      const values = data.map(row => Number(row[keys[1]]) || 0);
+
+      chartInstance = new Chart(ctx, {
+        type: chartType,
+        data: {
+          labels: labels,
+          datasets: [{
+            label: keys[1],
+            data: values,
+            backgroundColor: ['#fbbf24', '#34d399', '#a78bfa', '#f87171', '#60a5fa'],
+            borderColor: '#4b5563',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: chartType !== 'bar'
+            }
+          }
+        }
+      });
+    }
+
+    function showSummary(data) {
+      const summary = document.getElementById('summary');
+      const keys = Object.keys(data[0]);
+
+      summary.innerHTML = `
+        <div class="bg-white p-4 rounded shadow text-center">
+          <h4 class="text-lg font-semibold">📄 Total Rows</h4>
+          <p class="text-2xl font-bold text-accent">${data.length}</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow text-center">
+          <h4 class="text-lg font-semibold">📊 Total Columns</h4>
+          <p class="text-2xl font-bold text-accent">${keys.length}</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow text-center">
+          <h4 class="text-lg font-semibold">📝 First Column</h4>
+          <p class="text-xl font-bold">${keys[0]}</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow text-center">
+          <h4 class="text-lg font-semibold">📈 Chart Column</h4>
+          <p class="text-xl font-bold">${keys[1]}</p>
+        </div>
+      `;
+    }
+
+    document.getElementById('chartType').addEventListener('change', () => {
+      const uploadInput = document.getElementById('upload');
+      if (uploadInput.files.length > 0) {
+        uploadInput.dispatchEvent(new Event('change'));
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login | Excel Analytics</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#fce7f3',
+            accent: '#a855f7',
+            textgray: '#4b5563',
+            peach: '#fff7ed',
+          }
+        }
+      }
+    };
+  </script>
+</head>
+
+<body class="bg-peach min-h-screen flex items-center justify-center">
+  <div class="container bg-primary bg-opacity-90 p-10 rounded-xl shadow-xl w-full max-w-sm">
+    <h2 class="text-3xl font-bold mb-6 text-center text-textgray">🔐 Excel Analytics Login</h2>
+    <form onsubmit="return login(event)">
+      <input 
+        type="text" 
+        placeholder="Username" 
+        required 
+        class="w-full mb-4 px-4 py-2 border border-accent rounded-md focus:outline-none focus:ring-2 focus:ring-accent"
+      >
+      <input 
+        type="password" 
+        placeholder="Password" 
+        required 
+        class="w-full mb-4 px-4 py-2 border border-accent rounded-md focus:outline-none focus:ring-2 focus:ring-accent"
+      >
+      <button 
+        type="submit" 
+        class="w-full bg-accent text-white py-2 rounded-md hover:bg-violet-700 transition"
+      >
+        Login
+      </button>
+    </form>
+  </div>
+
+  <script>
+    function login(e) {
+      e.preventDefault();
+      
+      window.location.href = "home.html";
+      return false;
+    }
+  </script>
+  <script src="login.js"></script>
+</body>
+</html>

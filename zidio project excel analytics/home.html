@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Excel Analytics - Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#fce7f3',     
+            accent: '#a855f7',      
+            textgray: '#4b5563',    
+            peach: '#fff7ed',       
+          }
+        }
+      }
+    };
+  </script>
+</head>
+
+<body class="min-h-screen bg-cover bg-center bg-no-repeat" style="background-image: url('purple lavender.jpg');">
+  <nav class="bg-primary shadow-md p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold text-accent">Excel Analytics</h1>
+    <ul class="flex space-x-6">
+      <li><a href="home.html" class="hover:text-accent text-textgray font-medium">Home</a></li>
+      <li><a href="dashboard.html" class="hover:text-accent text-textgray font-medium">Dashboard</a></li>
+      <li><a href="insights.html" class="hover:text-accent text-textgray font-medium">Insights</a></li>
+      <li><a href="login.html" class="hover:text-accent text-textgray font-medium">Logout</a></li>
+    </ul>
+  </nav>
+
+  <section class="flex items-center justify-center h-[85vh] bg-black bg-opacity-30 text-center">
+  <div class="glass-box p-8 max-w-2xl cursor-pointer transition-transform duration-300" onclick="this.classList.toggle('zoomed')">
+    <h2 class="text-4xl font-bold mb-4">Excel Analytics</h2>
+    <p class="text-lg mb-2">Visualize, Explore, and Understand Your Excel Data Easily.</p>
+    <p class="text-base text-gray-100">Upload your Excel sheets and get instant visual insights, charts, and patterns — effortlessly.</p>
+  </div>
+</section>
+
+</body>
+</html>
